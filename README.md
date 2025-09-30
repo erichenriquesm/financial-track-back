@@ -17,6 +17,7 @@
 
 ## Estrutura do Projeto
 
+```text
 financial-track-back/
 ├── cmd/
 │   └── app.go                 # Arquivo principal para iniciar o servidor
