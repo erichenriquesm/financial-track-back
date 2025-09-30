@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  financial_track_db:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: admin
+      POSTGRES_DB: financial_track
+    ports:
+      - "5432:5432"
+    volumes:
+      - financial_track_db:/var/lib/postgresql/data
+
+volumes:
+  financial_track_db: {}
