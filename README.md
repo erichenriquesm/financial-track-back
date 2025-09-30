@@ -31,16 +31,11 @@ financial-track-back/
 │   └── user_repository.go     # Repositório para interagir com o banco de dados de usuários
 ├── route/
 │   ├── health.go              # Rota para verificar a saúde da API
-│   └── user_routes.go         # Rota para endpoints relacionados a usuários
+│   └── user.go                # Rotas para endpoints relacionados a usuários
 ├── usecase/
-│   └── user_usecase.go        # Lógica de negócios para usuários
+│   └── user.go                # Lógica de negócios para usuários
 ├── utils/
 │   └── validator.go           # Funções auxiliares de validação
-├── middleware/
-│   └── auth_middleware.go     # Middleware de autenticação JWT
-├── migrations/
-│   ├── 001_create_users.sql
-│   └── 002_create_expenses.sql
 ├── .env.example               # Exemplo do arquivo .env
 ├── .env                       # Arquivo de variáveis de ambiente
 ├── .gitignore                 # Arquivos e pastas ignoradas pelo Git
