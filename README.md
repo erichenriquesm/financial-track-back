@@ -50,26 +50,21 @@ financial-track-back/
 
 1. Clone este repositório:
 
-   ```bash
    git clone https://github.com/erichenriquesm/financial-track-back.git
    cd financial-track-back
 
 2. Copie o arquivo .env.example para .env e configure suas variáveis de ambiente, como as credenciais do banco de dados:
 
-   ```bash
    cp .env.example .env
 
 3. Instale as dependências do Go:
 
-   ```bash
    go mod tidy
 
 4. Inicie o banco de dados com Docker (se necessário):
 
-   ```bash
    docker-compose up -d
 
 4. Rode o servidor:
 
-   ```bash
    go run cmd/app.go
