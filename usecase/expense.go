@@ -4,6 +4,7 @@ import (
 	"errors"
 	"financial-track/model"
 	"financial-track/repository"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -24,7 +25,7 @@ func (e *ExpenseUseCase) CreateExpense(input model.CreateExpenseInput) (model.Ex
 		return model.Expense{}, errors.New("description cannot be empty")
 	}
 
-	input.TransactionAt = input.TransactionAt
+	input.TransactionAt = time.Now()
 
 	userId, err := uuid.Parse(input.UserID)
 	if err != nil {
