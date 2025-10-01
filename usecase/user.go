@@ -4,6 +4,7 @@ import (
 	"errors"
 	"financial-track/model"
 	"financial-track/repository"
+	"financial-track/utils"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -42,4 +43,25 @@ func (u *UserUseCase) RegisterUser(input model.RegisterUserInput) (*model.User, 
 
 	user.Password = ""
 	return &user, nil
+}
+
+func (u *UserUseCase) LoginUser(input model.LoginUserInput) (string, error) {
+	user, err := u.repo.FindByEmail(input.Email)
+	if err != nil {
+		return "", err
+	}
+	if user == nil {
+		return "", errors.New("invalid credentials")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
+		return "", errors.New("invalid credentials")
+	}
+
+	token, err := utils.GenerateToken(user.ID)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }

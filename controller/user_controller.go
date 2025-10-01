@@ -43,3 +43,28 @@ func (uc *UserController) RegisterUser(c *gin.Context) {
 		"user":    createdUser,
 	})
 }
+
+func (uc *UserController) LoginUser(c *gin.Context) {
+	var input model.LoginUserInput
+	errs := utils.ValidateJSON(c, &input)
+	if errs != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": "Fields are invalid or missing",
+			"errors":  errs,
+		})
+		return
+	}
+
+	token, err := userUseCase.LoginUser(input)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Login successful",
+		"token":   token,
+	})
+}

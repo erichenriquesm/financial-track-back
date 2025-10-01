@@ -13,6 +13,7 @@ func RegisterUserRoutes(r *gin.Engine) {
 		auth := api.Group("/auth")
 		{
 			auth.POST("/register", userController.RegisterUser)
+			auth.POST("/login", userController.LoginUser)
 		}
 	}
 }
