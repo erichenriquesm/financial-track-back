@@ -27,6 +27,11 @@ func CreateExpense(c *gin.Context) {
 		return
 	}
 
+	if !model.IsValidCategory(createExpenseInput.Category) {
+		c.JSON(400, gin.H{"errors": "Invalid category"})
+		return
+	}
+
 	createExpenseInput.UserID = userId.(string)
 
 	expense, expenseErr := expenseUseCase.CreateExpense(createExpenseInput)
@@ -39,6 +44,7 @@ func CreateExpense(c *gin.Context) {
 	resp := model.ExpenseResponse{
 		ID:            expense.ID,
 		UserID:        expense.UserID,
+		Category:      expense.Category,
 		Amount:        expense.Amount,
 		Description:   expense.Description,
 		TransactionAt: expense.TransactionAt,

@@ -36,6 +36,7 @@ func (e *ExpenseUseCase) CreateExpense(input model.CreateExpenseInput) (model.Ex
 		Amount:        input.Amount,
 		Description:   input.Description,
 		TransactionAt: input.TransactionAt,
+		Category:      input.Category,
 	}
 
 	if err := e.repo.Create(&expense); err != nil {

@@ -7,10 +7,40 @@ import (
 	"gorm.io/gorm"
 )
 
+type Category string
+
+const (
+	Food           Category = "FOOD"
+	Transportation Category = "TRANSPORTATION"
+	Housing        Category = "HOUSING"
+	Health         Category = "HEALTH"
+	Education      Category = "EDUCATION"
+	Entertainment  Category = "ENTERTAINMENT"
+	Clothing       Category = "CLOTHING"
+	Personal       Category = "PERSONAL"
+	Finance        Category = "FINANCE"
+	Others         Category = "OTHERS"
+)
+
+var validCategories = []Category{
+	Food, Transportation, Housing, Health, Education,
+	Entertainment, Clothing, Personal, Finance, Others,
+}
+
+func IsValidCategory(c Category) bool {
+	for _, cat := range validCategories {
+		if c == cat {
+			return true
+		}
+	}
+	return false
+}
+
 type Expense struct {
 	ID            uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
 	UserID        uuid.UUID `json:"user_id"`
 	User          User      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"user"`
+	Category      Category  `gorm:"type:varchar(20)" json:"category"`
 	Amount        float64   `json:"amount"`
 	Description   string    `json:"description"`
 	TransactionAt time.Time `json:"transaction_at"`
@@ -25,6 +55,7 @@ func (u *Expense) BeforeCreate(tx *gorm.DB) (err error) {
 
 type CreateExpenseInput struct {
 	UserID        string    `json:"user_id"`
+	Category      Category  `gorm:"type:varchar(20)" json:"category" binding:"required"`
 	Amount        float64   `json:"amount" binding:"required"`
 	Description   string    `json:"description" binding:"required"`
 	TransactionAt time.Time `json:"transaction_at"`
@@ -33,6 +64,7 @@ type CreateExpenseInput struct {
 type ExpenseResponse struct {
 	ID            uuid.UUID `json:"id"`
 	UserID        uuid.UUID `json:"user_id"`
+	Category      Category  `gorm:"type:varchar(20)" json:"category" binding:"required"`
 	Amount        float64   `json:"amount"`
 	Description   string    `json:"description"`
 	TransactionAt time.Time `json:"transaction_at"`
