@@ -20,7 +20,7 @@ var userRepository *repository.UserRepository = repository.NewUserRepository()
 var userUseCase *usecase.UserUseCase = usecase.NewUserUseCase(userRepository)
 
 func (uc *UserController) RegisterUser(c *gin.Context) {
-	var input model.RegisterUserInput
+	var input model.CreateUserInput
 	errs := utils.ValidateJSON(c, &input)
 	if errs != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{

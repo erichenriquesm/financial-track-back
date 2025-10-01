@@ -17,7 +17,7 @@ func NewUserUseCase(repo *repository.UserRepository) *UserUseCase {
 	return &UserUseCase{repo: repo}
 }
 
-func (u *UserUseCase) RegisterUser(input model.RegisterUserInput) (*model.User, error) {
+func (u *UserUseCase) RegisterUser(input model.CreateUserInput) (*model.User, error) {
 	existing, err := u.repo.FindByEmail(input.Email)
 	if err != nil {
 		return nil, err

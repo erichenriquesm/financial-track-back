@@ -2,6 +2,7 @@ package main
 
 import (
 	"financial-track/database"
+	"financial-track/middleware"
 	"financial-track/route"
 	"log"
 	"os"
@@ -28,6 +29,12 @@ func main() {
 
 	route.RegisterHealthRoutes(server)
 	route.RegisterUserRoutes(server)
+
+	auth := server.Group("/")
+	auth.Use(middleware.AuthMiddleware())
+
+	// Authenticated routes
+	route.RegisterExpenseRoutes(auth)
 
 	server.Run(":" + port)
 }
