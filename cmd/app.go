@@ -3,6 +3,7 @@ package main
 import (
 	"financial-track/database"
 	"financial-track/middleware"
+	"financial-track/repository"
 	"financial-track/route"
 	"log"
 	"os"
@@ -12,6 +13,7 @@ import (
 )
 
 func main() {
+	var userRepository *repository.UserRepository = repository.NewUserRepository()
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("⚠️ File .env not found, using environment variables")
@@ -31,7 +33,7 @@ func main() {
 	route.RegisterUserRoutes(server)
 
 	auth := server.Group("/")
-	auth.Use(middleware.AuthMiddleware())
+	auth.Use(middleware.AuthMiddleware(userRepository))
 
 	// Authenticated routes
 	route.RegisterExpenseRoutes(auth)

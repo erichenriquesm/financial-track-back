@@ -24,7 +24,7 @@ func (e *ExpenseUseCase) CreateExpense(input model.CreateExpenseInput) (model.Ex
 		return model.Expense{}, errors.New("description cannot be empty")
 	}
 
-	input.TransactionAt = input.TransactionAt.UTC()
+	input.TransactionAt = input.TransactionAt
 
 	userId, err := uuid.Parse(input.UserID)
 	if err != nil {

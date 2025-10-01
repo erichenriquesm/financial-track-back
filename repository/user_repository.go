@@ -28,3 +28,15 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 func (r *UserRepository) Create(user *model.User) error {
 	return database.DB.Create(user).Error
 }
+
+func (r *UserRepository) FindByID(id string) (*model.User, error) {
+	var user model.User
+	err := database.DB.Where("id = ?", id).First(&user).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
+}
