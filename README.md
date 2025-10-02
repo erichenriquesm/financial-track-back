@@ -139,6 +139,21 @@ O sistema suporta as seguintes categorias:
 ### Hot Reload
 O projeto está configurado com **hot reload** usando Air. Qualquer alteração no código será automaticamente refletida sem precisar rebuildar o container.
 
+**Configuração otimizada:**
+- **Polling**: Habilitado para detectar mudanças em containers
+- **Symlinks**: Seguidos para melhor detecção
+- **Rerun**: Automático quando há mudanças
+- **Interrupt**: Envia sinal para parar processo anterior
+
+**Para testar o hot reload:**
+```bash
+# Ver logs da API
+make logs-api
+
+# Em outro terminal, modifique um arquivo .go
+# O Air deve detectar e rebuildar automaticamente
+```
+
 ### Comandos Úteis
 
 #### **Usando Makefile:**
