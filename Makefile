@@ -97,12 +97,6 @@ exec-db:
 	@echo "🔧 Executando comando no container do banco..."
 	docker compose exec financial_track_db psql -U admin -d financial_track
 
-# Testar hot reload
-test-reload:
-	@echo "🔄 Testando hot reload..."
-	@echo "Modifique um arquivo .go e veja se o Air detecta a mudança"
-	@echo "Use 'make logs-api' para ver os logs do Air"
-
 # Backup do banco
 backup:
 	@echo "💾 Fazendo backup do banco..."
