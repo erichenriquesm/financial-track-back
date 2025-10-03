@@ -256,13 +256,14 @@ O Docker Compose está configurado para ler as variáveis do arquivo `.env`.
 
 ## Variáveis de Ambiente
 
-| Variável | Descrição | Local | Docker |
-|----------|-----------|-------|--------|
-| `DB_URL` | URL de conexão com o PostgreSQL | `localhost:5432` | `financial_track_db:5432` |
-| `DB_HOST` | Host do banco de dados | `localhost` | `financial_track_db` |
-| `DB_PORT` | Porta do banco de dados | `5432` | `5432` |
-| `DB_USER` | Usuário do banco de dados | `admin` | `admin` |
-| `DB_PASSWORD` | Senha do banco de dados | `secret` | `secret` |
-| `DB_NAME` | Nome do banco de dados | `financial_track` | `financial_track` |
-| `JWT_SECRET` | Chave secreta para assinatura dos tokens JWT | - | - |
-| `SERVER_PORT` | Porta do servidor | `81` | `81` |
+| Variável | Descrição | Valor Padrão |
+|----------|-----------|--------------|
+| `DB_URL` | URL de conexão com o PostgreSQL | `postgres://admin:secret@financial_track_db:5432/financial_track?sslmode=disable` |
+| `JWT_SECRET` | Chave secreta para assinatura dos tokens JWT | `your-secret-key-here` |
+| `SERVER_PORT` | Porta do servidor | `81` |
+
+### **Para Desenvolvimento Local:**
+Altere apenas a `DB_URL` no arquivo `.env`:
+```
+DB_URL=postgres://admin:secret@localhost:5432/financial_track?sslmode=disable
+```
