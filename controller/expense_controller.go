@@ -5,6 +5,8 @@ import (
 	"financial-track/repository"
 	"financial-track/usecase"
 	"financial-track/utils"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -55,6 +57,38 @@ func CreateExpense(c *gin.Context) {
 	c.JSON(201, gin.H{"message": "Expense created successfully", "expense": resp})
 }
 
-func GetExpenses(c *gin.Context) {
-	c.JSON(200, gin.H{"message": "GetExpenses endpoint hit"})
+func GetMensalSummary(c *gin.Context) {
+	startDate := time.Now().AddDate(0, -1, 0)
+	endDate := time.Now()
+
+	page := 1
+	pageSize := 15
+	if p := c.Query("page"); p != "" {
+		if v, err := strconv.Atoi(p); err == nil && v > 0 {
+			page = v
+		}
+	}
+	if ps := c.Query("perPage"); ps != "" {
+		if v, err := strconv.Atoi(ps); err == nil && v > 0 {
+			pageSize = v
+		}
+	}
+
+	var body model.PaginationParams
+	if err := c.ShouldBindJSON(&body); err == nil {
+		if body.Page > 0 {
+			page = body.Page
+		}
+		if body.PageSize > 0 {
+			pageSize = body.PageSize
+		}
+	}
+
+	paged, err := expenseUseCase.GetMensalSummary(startDate, endDate, page, pageSize)
+	if err != nil {
+		c.JSON(400, gin.H{"errors": err})
+		return
+	}
+
+	c.JSON(200, paged)
 }

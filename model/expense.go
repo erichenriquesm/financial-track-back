@@ -71,3 +71,17 @@ type ExpenseResponse struct {
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }
+
+type Summary struct {
+	TotalAmount float64    `json:"total_amount"`
+	Pagination  Pagination `json:"pagination"`
+}
+
+type PagedSummary struct {
+	Amount      float64           `json:"amount"`
+	Data        []ExpenseResponse `json:"data"`
+	CurrentPage int               `json:"currentPage"`
+	LastPage    int               `json:"lastPage"`
+	TotalItems  int64             `json:"totalItems"`
+	PerPage     int               `json:"perPage"`
+}

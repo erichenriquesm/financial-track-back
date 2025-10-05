@@ -10,6 +10,6 @@ func RegisterExpenseRoutes(r *gin.RouterGroup) {
 	expense := r.Group("/expenses")
 	{
 		expense.POST("/", controller.CreateExpense)
-		expense.GET("/", controller.GetExpenses)
+		expense.GET("/mensal-summary", controller.GetMensalSummary)
 	}
 }

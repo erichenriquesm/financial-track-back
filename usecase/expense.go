@@ -45,3 +45,11 @@ func (e *ExpenseUseCase) CreateExpense(input model.CreateExpenseInput) (model.Ex
 	}
 	return expense, nil
 }
+
+func (e *ExpenseUseCase) GetMensalSummary(startDate, endDate time.Time, page, pageSize int) (model.PagedSummary, error) {
+	paged, err := e.repo.GetSummary(startDate, endDate, page, pageSize)
+	if err != nil {
+		return model.PagedSummary{}, err
+	}
+	return paged, nil
+}
