@@ -32,8 +32,10 @@ financial-track-back/
 ├── middleware/
 │   └── auth_middleware.go     # Middleware de autenticação JWT
 ├── model/
-│   ├── expense.go             # Definição do modelo de despesa
-│   └── user.go                # Definição do modelo de usuário
+│   ├── expense.go             # Modelo de despesa e DTOs
+│   ├── pagination.go          # Structs de paginação reutilizáveis
+│   ├── time.go                # Tipo JSONTime (parse/serialize no fuso)
+│   └── user.go                # Modelo de usuário
 ├── repository/
 │   ├── expense_repository.go  # Repositório para interagir com o banco de dados de despesas
 │   └── user_repository.go     # Repositório para interagir com o banco de dados de usuários
@@ -46,7 +48,6 @@ financial-track-back/
 │   └── user.go                # Lógica de negócios para usuários
 ├── utils/
 │   ├── auth.go                # Funções auxiliares de autenticação
-│   ├── JSONTime.go            # Utilitário para formatação de tempo JSON
 │   └── validator.go           # Funções auxiliares de validação
 ├── .env.example               # Exemplo do arquivo .env
 ├── .env                       # Arquivo de variáveis de ambiente
@@ -66,7 +67,29 @@ financial-track-back/
 
 ### Despesas (Autenticação necessária)
 - **POST** `/expenses/` - Criar nova despesa
-- **GET** `/expenses/` - Listar despesas do usuário
+  - Body (JSON, camelCase):
+    ```json
+    {
+      "userId": "<uuid>",
+      "category": "FOOD",
+      "amount": 105,
+      "description": "Lanche",
+      "transactionAt": "2025-10-05 17:19" // Formato 2006-01-02 15:04
+    }
+    ```
+- **GET** `/expenses/mensal-summary` - Resumo/paginação dos últimos 30 dias
+  - Query params: `page`, `perPage`
+  - Resposta (Laravel-like):
+    ```json
+    {
+      "amount": 123.45,
+      "data": [ /* expenses */ ],
+      "currentPage": 1,
+      "lastPage": 5,
+      "totalItems": 87,
+      "perPage": 20
+    }
+    ```
 
 ### Health Check
 - **GET** `/ping` - Verificar status da API
@@ -94,20 +117,20 @@ O sistema suporta as seguintes categorias:
    git clone https://github.com/erichenriquesm/financial-track-back.git
    cd financial-track-back
 
-2. Copie o arquivo env.example para .env e configure suas variáveis de ambiente:
-
-   cp env.example .env
+2. Crie o arquivo `.env` e configure suas variáveis de ambiente (exemplo abaixo):
 
    **Para desenvolvimento local, altere no .env:**
    ```
    DB_URL=postgres://admin:secret@localhost:5432/financial_track?sslmode=disable
    ```
 
-   **Para Docker, as variáveis já estão configuradas no env.example:**
+   **Exemplo de .env (Docker/local):**
    ```
    DB_URL=postgres://admin:secret@financial_track_db:5432/financial_track?sslmode=disable
    JWT_SECRET=your-secret-key-here
    SERVER_PORT=81
+   # Timezone da aplicação e da sessão do banco (padrão America/Sao_Paulo)
+   APP_TIMEZONE=America/Sao_Paulo
    ```
 
 3. Instale as dependências do Go:
@@ -253,6 +276,7 @@ O Docker Compose está configurado para ler as variáveis do arquivo `.env`.
 - `DB_URL` - URL de conexão com o banco
 - `JWT_SECRET` - Para autenticação
 - `SERVER_PORT` - Para a API
+- `APP_TIMEZONE` - Fuso horário da aplicação/banco (padrão `America/Sao_Paulo`)
 
 ## Variáveis de Ambiente
 
@@ -261,6 +285,7 @@ O Docker Compose está configurado para ler as variáveis do arquivo `.env`.
 | `DB_URL` | URL de conexão com o PostgreSQL | `postgres://admin:secret@financial_track_db:5432/financial_track?sslmode=disable` |
 | `JWT_SECRET` | Chave secreta para assinatura dos tokens JWT | `your-secret-key-here` |
 | `SERVER_PORT` | Porta do servidor | `81` |
+| `APP_TIMEZONE` | Fuso horário da aplicação/banco | `America/Sao_Paulo` |
 
 ### **Para Desenvolvimento Local:**
 Altere apenas a `DB_URL` no arquivo `.env`:
