@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"time"
 
+	"financial-track/model"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
@@ -120,11 +122,18 @@ func addTimeFormatErrors(obj interface{}, out map[string]string) {
 	typ := val.Type()
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
+		// Handle native time.Time with time_format tag
 		if field.Type == reflect.TypeOf(time.Time{}) {
 			format := field.Tag.Get("time_format")
 			if format != "" {
 				out[field.Name] = "Invalid datetime format. Expected: " + format
+				continue
 			}
+		}
+		// Handle custom model.JSONTime
+		if field.Type == reflect.TypeOf(model.JSONTime{}) {
+			out[field.Name] = "Invalid datetime format. Expected: " + model.LayoutYYYYMMDDHHMM
+			continue
 		}
 	}
 }
