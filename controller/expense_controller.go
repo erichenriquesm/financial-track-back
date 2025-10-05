@@ -58,7 +58,8 @@ func CreateExpense(c *gin.Context) {
 }
 
 func GetMensalSummary(c *gin.Context) {
-	startDate := time.Now().AddDate(0, -1, 0)
+	now := time.Now()
+	startDate := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
 	endDate := time.Now()
 
 	page := 1
