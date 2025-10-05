@@ -25,8 +25,6 @@ func (e *ExpenseUseCase) CreateExpense(input model.CreateExpenseInput) (model.Ex
 		return model.Expense{}, errors.New("description cannot be empty")
 	}
 
-	input.TransactionAt = time.Now()
-
 	userId, err := uuid.Parse(input.UserID)
 	if err != nil {
 		return model.Expense{}, errors.New("invalid user id")
@@ -36,7 +34,7 @@ func (e *ExpenseUseCase) CreateExpense(input model.CreateExpenseInput) (model.Ex
 		UserID:        userId,
 		Amount:        input.Amount,
 		Description:   input.Description,
-		TransactionAt: input.TransactionAt,
+		TransactionAt: input.TransactionAt.ToTime(),
 		Category:      input.Category,
 	}
 

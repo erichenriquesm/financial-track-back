@@ -43,7 +43,7 @@ type Expense struct {
 	Category      Category  `gorm:"type:varchar(20)" json:"category"`
 	Amount        float64   `json:"amount"`
 	Description   string    `json:"description"`
-	TransactionAt time.Time `json:"transaction_at"`
+	TransactionAt time.Time `json:"transactionAt"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }
@@ -54,11 +54,11 @@ func (u *Expense) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type CreateExpenseInput struct {
-	UserID        string    `json:"user_id"`
-	Category      Category  `gorm:"type:varchar(20)" json:"category" binding:"required"`
-	Amount        float64   `json:"amount" binding:"required"`
-	Description   string    `json:"description" binding:"required"`
-	TransactionAt time.Time `json:"transaction_at"`
+	UserID        string   `json:"user_id"`
+	Category      Category `gorm:"type:varchar(20)" json:"category" binding:"required"`
+	Amount        float64  `json:"amount" binding:"required"`
+	Description   string   `json:"description" binding:"required"`
+	TransactionAt JSONTime `json:"transactionAt" binding:"required"`
 }
 
 type ExpenseResponse struct {
@@ -67,7 +67,7 @@ type ExpenseResponse struct {
 	Category      Category  `gorm:"type:varchar(20)" json:"category" binding:"required"`
 	Amount        float64   `json:"amount"`
 	Description   string    `json:"description"`
-	TransactionAt time.Time `json:"transaction_at"`
+	TransactionAt time.Time `json:"transactionAt"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }
