@@ -39,6 +39,10 @@ func (jt JSONTime) ToTime() time.Time {
 	return jt.Time.In(getAppLocation())
 }
 
+func (jt JSONTime) IsZero() bool {
+	return jt.Time.IsZero()
+}
+
 func getAppLocation() *time.Location {
 	tz := os.Getenv("APP_TIMEZONE")
 	if tz == "" {

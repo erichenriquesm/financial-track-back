@@ -19,6 +19,16 @@ func ValidateJSON(ctx *gin.Context, obj interface{}) map[string]string {
 			for _, fe := range ve {
 				out[fe.Field()] = validationMessage(fe)
 			}
+			// Complementa com campos required que não apareceram no ValidationErrors
+			val := reflect.ValueOf(obj).Elem()
+			typ := val.Type()
+			for i := 0; i < val.NumField(); i++ {
+				field := typ.Field(i)
+				tag := field.Tag.Get("binding")
+				if (tag == "required" || containsRequired(tag)) && out[field.Name] == "" {
+					out[field.Name] = "This field is required"
+				}
+			}
 			return out
 		}
 
