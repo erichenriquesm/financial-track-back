@@ -56,7 +56,7 @@ func (u *Expense) BeforeCreate(tx *gorm.DB) (err error) {
 type CreateExpenseInput struct {
 	UserID        string   `json:"userId"`
 	Category      Category `gorm:"type:varchar(20)" json:"category" binding:"required"`
-	Amount        float64  `json:"amount" binding:"required"`
+	Amount        float64  `json:"amount" binding:"required,gt=0"`
 	Description   string   `json:"description" binding:"required"`
 	TransactionAt JSONTime `json:"transactionAt" binding:"required"`
 }
